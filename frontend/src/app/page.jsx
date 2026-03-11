@@ -1,9 +1,10 @@
-
+import Spline from "@splinetool/react-spline";
  export default function Home() {
    return (
     <main className="bg-gray-50">
 
       {/* HERO SECTION */}
+      
       <div className="pt-12 md:pt-20 pb-16 md:pb-24">
         <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
           <section className="flex flex-col justify-between gap-6 sm:gap-10 md:gap-16 lg:flex-row items-center">
@@ -40,14 +41,9 @@
             {/* text content - end */}
 
             {/* image - start */}
-            <div className="h-48 sm:h-64 lg:h-auto overflow-hidden rounded-xl bg-gray-100 shadow-xl xl:w-5/12">
-              <img
-                src="https://www.jeffbullas.com/wp-content/uploads/2025/03/DALL%C2%B7E-2025-03-10-19.10.13-A-visually-appealing-and-non-generic-landscape-image-showcasing-an-AI-virtual-assistant-with-a-human-like-avatar-in-a-professional-setting.-The-AI-av-700x400.webp"
-                loading="lazy"
-                alt="Create Professional AI Avatar Videos in Minutes"
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
+            <div className="h-[400px] w-full xl:w-5/12 rounded-xl overflow-hidden shadow-xl bg-black">
+  <Spline scene="https://prod.spline.design/B-zPYB8IbfXRxV1d/scene.splinecode" />
+</div>
             {/* image - end */}
           </section>
         </div>
