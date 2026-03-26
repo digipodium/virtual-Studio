@@ -2,150 +2,97 @@
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-<div className="bg-gray-50">
-  <footer className="mx-auto max-w-screen-2xl px-4 md:px-8">
-    <div className="mb-8 grid grid-cols-2 gap-8 pt-8 md:grid-cols-4 lg:grid-cols-6">
-      <div className="col-span-full lg:col-span-2">
-        {/* logo - start */}
-        <div className="mb-4">
-          <a
-            href="/"
-            className="inline-flex items-center gap-2 text-lg font-bold text-black md:text-xl"
-            aria-label="logo"
-          >
-            <img 
-              src="/logo.jpeg" 
-              alt="Virtual Studio Logo" 
-              className="h-6 w-auto object-contain" 
-            />
-            VIRTUAL <span className="text-violet-500">STUDIO</span>
-          </a>
-        </div>
-        {/* logo - end */}
-        
-        {/* description - start */}
-        <p className="mb-6 text-sm text-gray-500 sm:pr-8">
-          AI Avatar Virtual Studio is an intelligent content creation platform that enables businesses, educators, and creators to generate professional AI-powered videos instantly from text scripts.
-        </p>
-        {/* description - end */}
-      </div>
+    <div className=" border-t border-gray-800 bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F]">
+      <footer className="mx-auto max-w-screen-2xl px-6 md:px-10 py-12">
 
-      {/* nav - start */}
-      <div>
-        <div className="mb-4 text-sm font-bold uppercase tracking-widest text-gray-800">
-          Products
-        </div>
-        <nav className="flex flex-col gap-3">
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Overview
-            </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Solutions
-            </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Pricing
-            </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Customers
-            </a>
-          </div>
-        </nav>
-      </div>
-      {/* nav - end */}
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-6">
 
-      {/* nav - start */}
-      <div>
-        <div className="mb-4 text-sm font-bold uppercase tracking-widest text-gray-800">
-          Company
-        </div>
-        <nav className="flex flex-col gap-3">
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              About
+          {/* LOGO + DESC */}
+          <div className="col-span-full lg:col-span-2">
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 text-lg font-bold text-white"
+            >
+              <img
+                src="/logo.png"
+                alt="Virtual Studio Logo"
+                className="h-6 w-auto"
+              />
+              VIRTUAL <span className="text-purple-400">STUDIO</span>
             </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Our Mission
-            </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Careers
-            </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Blog
-            </a>
-          </div>
-        </nav>
-      </div>
-      {/* nav - end */}
 
-      {/* nav - start */}
-      <div>
-        <div className="mb-4 text-sm font-bold uppercase tracking-widest text-gray-800">
-          Support
-        </div>
-        <nav className="flex flex-col gap-3">
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Contact Us
-            </a>
+            <p className="mt-4 text-gray-400 text-sm leading-relaxed">
+              AI Avatar Virtual Studio is an intelligent platform that helps creators generate professional AI videos from text scripts.
+            </p>
           </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Help Center
-            </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              FAQ
-            </a>
-          </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Documentation
-            </a>
-          </div>
-        </nav>
-      </div>
-      {/* nav - end */}
 
-      {/* nav - start */}
-      <div>
-        <div className="mb-4 text-sm font-bold uppercase tracking-widest text-gray-800">
-          Legal
+          {/* COLUMN */}
+          {[
+            {
+              title: "Products",
+              links: ["Overview", "Solutions", "Pricing", "AI Video Generator"]
+            },
+            {
+              title: "Industry",
+              links: ["About", "Careers", "Blog", "Educators"]
+            },
+            {
+              title: "Support",
+              links: ["Contact Us", "Help Center", "FAQ", "Documentation"]
+            },
+            {
+              title: "Legal",
+              links: ["Terms of Service", "Privacy Policy"]
+            }
+          ].map((section, i) => (
+            <div key={i}>
+              <h3 className="mb-4 text-sm font-semibold text-white uppercase tracking-wider">
+                {section.title}
+              </h3>
+
+              <ul className="space-y-2">
+                {section.links.map((link, j) => (
+                  <li key={j}>
+                    <a
+                      href="#"
+                      className="text-sm text-gray-400 hover:text-purple-400 transition"
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
         </div>
-        <nav className="flex flex-col gap-3">
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Terms of Service
+
+        {/* BOTTOM */}
+        <div className="border-t border-gray-800 mt-10 pt-6 text-center">
+
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} Virtual Studio. All rights reserved.
+          </p>
+
+          {/* SOCIAL LINKS */}
+          <div className="mt-3 flex justify-center gap-6 text-sm">
+            <a
+              href="#"
+              className="text-gray-400 hover:text-purple-400 transition"
+            >
+              GitHub
+            </a>
+            <a
+              href="#"
+              className="text-gray-400 hover:text-purple-400 transition"
+            >
+              LinkedIn
             </a>
           </div>
-          <div>
-            <a href="#" className="text-sm text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600">
-              Privacy Policy
-            </a>
-          </div>
-        </nav>
-      </div>
-      {/* nav - end */}
+
+        </div>
+
+      </footer>
     </div>
-
-    <div className="border-t py-6 text-center text-sm text-gray-400">
-      © {new Date().getFullYear()} Virtual Studio. All rights reserved.
-    </div>
-  </footer>
-</div>
-
   );
 }
