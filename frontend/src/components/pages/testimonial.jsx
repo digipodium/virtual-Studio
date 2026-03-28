@@ -53,7 +53,7 @@ const Testimonial = () => {
             R
           </div>
           <div>
-            <h4 className="text-white font-semibold">Riya Verma</h4>
+            <h4 className="text-white font-semibold">Prabhat Maurya</h4>
             <span className="text-gray-500 text-sm">Business Owner</span>
           </div>
         </div>
@@ -73,7 +73,7 @@ const Testimonial = () => {
             
           </div>
           <div>
-            <h4 className="text-white font-semibold">Sahil Khan</h4>
+            <h4 className="text-white font-semibold">Neeraj Wallia</h4>
             <span className="text-gray-500 text-sm">YouTuber</span>
           </div>
         </div>
