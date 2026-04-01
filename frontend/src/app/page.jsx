@@ -1,4 +1,4 @@
-import Features from "@/components/pages/features";
+import Features from "@/components/pages/Features";
 import Home from "@/components/pages/Home";
 import CTA from "@/components/pages/CTA";
 import FAQ from "@/components/pages/FAQ";
