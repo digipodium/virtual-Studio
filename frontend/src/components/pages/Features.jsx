@@ -1,13 +1,13 @@
 import React from 'react'
-
 const Features = () => {
   return (
 
-      <section id="#features" className=" bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F]">
+      <section id="#features"className="bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F]">
         <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
+          
 
           {/* Heading */}
-          <div className="mb-10 md:mb-16">
+          <div className=" mb-10 md:mb-16">
             <h2 className="mb-4 text-center text-3xl font-bold text-white md:mb-6 lg:text-4xl">
               Intelligent <span className="text-purple-500">AI Avatar Video Creation</span>
             </h2>

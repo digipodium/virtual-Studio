@@ -23,7 +23,7 @@ const CTA = () => {
             {/* RIGHT BUTTON */}
             <div>
               <button className="bg-white text-purple-600 px-10 py-5 rounded-full font-semibold hover:scale-105 transition">
-                Get Started
+                Create your free Account
               </button>
             </div>
 

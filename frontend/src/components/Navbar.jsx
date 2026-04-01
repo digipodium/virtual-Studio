@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <nav className="flex justify-between items-center px-4 md:px-8 py-4 bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F]">
+    <nav className="sticky top-0 z-50 ... flex justify-between items-center px-4 md:px-8 py-4 bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F]">
       <Link href="/" className="flex items-center gap-3">
         {/* Make sure the file in your public folder is exactly named logo.png */}
         <img
@@ -19,14 +19,14 @@ export default function Navbar() {
           <Link href="#home" className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition">
             Home
           </Link>
-          <Link href="#features" className=" text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition">
+          <Link href="#Features" className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition">
             Features
           </Link>
           <Link href="#Demo" className=" text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition">
             Demo
           </Link>
-          <Link href="#Contact" className=" text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition">
-            Contact
+          <Link href="#contact" className=" text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition">
+            contact
           </Link>
         </div>      <div className="flex items-center space-x-2 md:space-x-4">
         <Link
