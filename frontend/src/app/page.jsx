@@ -1,20 +1,34 @@
-import Features from "@/components/pages/Features";
-import Home from "@/components/pages/Home";
-import CTA from "@/components/pages/CTA";
-import FAQ from "@/components/pages/FAQ";
-import Testimonial from "@/components/pages/testimonial";
-import Contact from "@/components/pages/contact";
-export default function VirtualStudio(){
-  return(
-    <main className="flex flex-col">
-     <Home />
-     <Features />
-     <Testimonial/>
-     <CTA />
-     <FAQ />
-     <Contact />
-     
+import Features from "./Features/page";
+import CTA from "./CTA/page";
+import FAQ from "./FAQ/page";
+import Testimonial from "./testimonial/page";
+import Contact from "./contact/page";
+import Home from "./Home/page";
 
-     </main>
+export default function Page() {
+  return (
+    <main className="flex flex-col">
+
+       <section id="Home">
+        <Home />
+      </section>
+
+      <section id="Features">
+        <Features />
+      </section>
+
+      <section id="Demo">
+        <Testimonial />
+      </section>
+
+      <CTA />
+
+      <FAQ />
+
+      <section id="contact">
+        <Contact />
+      </section>
+
+    </main>
   );
 }

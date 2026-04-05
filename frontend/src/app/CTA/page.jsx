@@ -13,7 +13,7 @@ const CTA = () => {
             {/* LEFT CONTENT */}
             <div className="text-left">
               <h2 className="text-3xl md:text-3xl font-bold text-white mb-2">
-                Start Creating AI Videos Today 🚀
+                Start Creating AI Videos Today 
               </h2>
               <p className="text-white/80">
                 No camera. No editing. Just AI-powered videos.
