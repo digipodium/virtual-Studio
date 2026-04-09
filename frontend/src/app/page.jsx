@@ -1,33 +1,92 @@
-import Features from "./Features/page";
-import CTA from "./CTA/page";
-import FAQ from "./FAQ/page";
-import Testimonial from "./testimonial/page";
-import Contact from "./contact/page";
-import Home from "./Home/page";
+"use client";
+
+import { motion } from "framer-motion";
+
+import Features from "./(main)/Features/page";
+import CTA from "./(main)/CTA/page";
+import FAQ from "./(main)/FAQ/page";
+import Testimonial from "./(main)/testimonial/page";
+import Contact from "./(main)/contact/page";
+import Home from "./(main)/Home/page";
+
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 60 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
 
 export default function Page() {
   return (
     <main className="flex flex-col">
 
-       <section id="Home">
+      <motion.section
+        id="Home"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
+
+     
+
         <Home />
-      </section>
+      </motion.section>
 
-      <section id="Features">
+      <motion.section
+        id="Features"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
         <Features />
-      </section>
+      </motion.section>
 
-      <section id="Demo">
+      <motion.section
+        id="Demo"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
+
         <Testimonial />
-      </section>
+      </motion.section>
 
-      <CTA />
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
+        <CTA />
+      </motion.div>
 
-      <FAQ />
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
+        <FAQ />
+      </motion.div>
 
-      <section id="contact">
+      <motion.section
+        id="contact"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
         <Contact />
-      </section>
+      </motion.section>
 
     </main>
   );

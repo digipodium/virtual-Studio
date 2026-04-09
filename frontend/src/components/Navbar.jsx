@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 flex justify-between items-center px-4 md:px-8 py-4 bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F]">
-      
+
       <Link href="/" className="flex items-center gap-3">
         <img
           src="/logo.png"
@@ -17,27 +17,25 @@ export default function Navbar() {
       </Link>
 
       <div className="hidden md:flex items-center space-x-8">
-        
+
         <Link
-          href="/#Home"
+          href="/pricing"  
           className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
         >
-          Home
+          Pricing
+        </Link>
+        <Link
+          href="/Features"
+          className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
+        >
+          Features
         </Link>
 
-        {/* ✅ FIXED FEATURES LINK */}
-       <Link
-  href="/Features"
-  className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
->
-  Features
-</Link>
-
         <Link
-          href="/#Demo"
+          href="/About"
           className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
         >
-          Demo
+          About
         </Link>
 
         <Link
@@ -45,6 +43,12 @@ export default function Navbar() {
           className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
         >
           Contact
+        </Link>
+        <Link
+          href="/admin/Dashboard"
+          className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
+        >
+          Dashboard
         </Link>
       </div>
 
