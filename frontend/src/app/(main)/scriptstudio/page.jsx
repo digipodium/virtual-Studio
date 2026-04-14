@@ -168,11 +168,11 @@ function Steps({ current }) {
       {['Configure', 'Script', 'Record'].map((label, i) => (
         <div key={i} className="flex items-center">
           <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold ${i === current ? 'bg-[#00c8f5] text-white' :
-              i < current ? 'text-green-400' : 'text-gray-600'
+            i < current ? 'text-green-400' : 'text-gray-600'
             }`}>
             <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs border ${i === current ? 'border-white bg-white text-[#00c8f5]' :
-                i < current ? 'border-green-400 bg-green-400 text-gray-900' :
-                  'border-gray-600 text-gray-600'
+              i < current ? 'border-green-400 bg-green-400 text-gray-900' :
+                'border-gray-600 text-gray-600'
               }`}>{i < current ? '✓' : i + 1}</div>
             <span className="hidden sm:block">{label}</span>
           </div>
@@ -344,7 +344,7 @@ export default function ScriptStudioPage() {
         thumbnailUrl: data.avatar.thumbnailUrl || URL.createObjectURL(file), // use preview if thumb not yet ready
         variantName: 'One-Shot',
       };
-      
+
       setAvatars(prev => [newAvatar, ...prev]);
       setSelectedAvatar(newAvatar);
       setPersonaName(newAvatar.name);
@@ -502,7 +502,7 @@ export default function ScriptStudioPage() {
             const duration = Date.now() - recStartRef.current;
             setOutputDuration(duration);
             setRecStatus('done');
-            
+
             // Auto save to dashboard
             autoSaveVideo(blob, scriptTitle || 'AI Avatar Video');
           };
@@ -616,7 +616,8 @@ export default function ScriptStudioPage() {
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00c8f5] to-blue-600 flex items-center justify-center text-sm">📝</div>
           <div>
-            <p className="font-bold text-sm">Script Studio</p>
+            <p className="font-bold text-sm">Script <span className="text-purple-500">Studio</span></p>
+
             <p className="text-xs text-gray-400 leading-none">Avatar video from script</p>
           </div>
         </div>
@@ -650,80 +651,117 @@ export default function ScriptStudioPage() {
 
               {/* Avatar */}
               <Section title={`👤 Avatar ${loading ? '(loading...)' : `— ${avatars.length} available`}`}>
-                <input value={personaName} onChange={e => setPersonaName(e.target.value)}
-                  placeholder="Presenter name..."
-                  className="w-full bg-gray-50 text-gray-900 text-sm rounded-xl px-3 py-2.5 border border-gray-100 focus:border-[#00c8f5] focus:outline-none" />
 
-                <input value={avatarSearch} onChange={e => setAvatarSearch(e.target.value)}
+                {/* Inputs */}
+                <input
+                  value={personaName}
+                  onChange={e => setPersonaName(e.target.value)}
+                  placeholder="Presenter name..."
+                  className="w-full bg-[#0f172a] text-white text-sm rounded-xl px-3 py-2.5 border border-[#1e293b] focus:border-[#00c8f5] focus:ring-1 focus:ring-[#00c8f5] outline-none transition-all"
+                />
+
+                <input
+                  value={avatarSearch}
+                  onChange={e => setAvatarSearch(e.target.value)}
                   placeholder="Search by name or variant..."
-                  className="w-full bg-gray-50 text-gray-900 text-xs rounded-xl px-3 py-2 border border-gray-100 focus:border-[#00c8f5] focus:outline-none" />
+                  className="w-full bg-[#0f172a] text-gray-300 text-xs rounded-xl px-3 py-2 border border-[#1e293b] focus:border-[#00c8f5] focus:ring-1 focus:ring-[#00c8f5] outline-none transition-all"
+                />
 
                 {loading ? (
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {[...Array(6)].map((_, i) => (
-                      <div key={i} className="aspect-square rounded-xl bg-gray-800 animate-pulse" />
+                      <div key={i} className="aspect-square rounded-xl bg-[#1e293b] animate-pulse" />
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-3 gap-2 max-h-80 overflow-y-auto pr-1">
-                    {/* Add Custom Avatar Button */}
-                    <button onClick={handleUploadClick}
+                  <div className="grid grid-cols-3 gap-3 max-h-80 overflow-y-auto pr-1">
+
+                    {/* Upload Avatar */}
+                    <button
+                      onClick={handleUploadClick}
                       disabled={isUploadingAvatar}
-                      className={`relative rounded-xl border-2 border-dashed border-gray-100 flex flex-col items-center justify-center p-2 transition-all hover:bg-gray-50 hover:border-[#00c8f5] group aspect-square`}>
+                      className="relative rounded-xl border border-dashed border-[#1e293b] flex flex-col items-center justify-center p-3 transition-all hover:border-[#00c8f5] hover:bg-[#020617] group aspect-square"
+                    >
                       {isUploadingAvatar ? (
                         <div className="w-6 h-6 border-2 border-[#00c8f5] border-t-transparent rounded-full animate-spin mb-1" />
                       ) : (
-                        <div className="text-2xl mb-1 text-gray-400 group-hover:text-[#00c8f5] group-hover:scale-110 transition-transform">📸</div>
+                        <div className="text-2xl mb-1 text-gray-500 group-hover:text-[#00c8f5] group-hover:scale-110 transition-transform">
+                          📸
+                        </div>
                       )}
-                      <p className="text-[10px] font-bold text-gray-400 group-hover:text-[#00c8f5]">Upload Photo</p>
-                      <input type="file" ref={fileInputRef} onChange={handleAvatarFileUpload} accept="image/*" className="hidden" />
+                      <p className="text-[10px] font-semibold text-gray-500 group-hover:text-[#00c8f5]">
+                        Upload
+                      </p>
+
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleAvatarFileUpload}
+                        accept="image/*"
+                        className="hidden"
+                      />
                     </button>
 
+                    {/* Empty */}
                     {filteredAvatars.length === 0 ? (
                       <div className="col-span-2 flex items-center justify-center py-6">
-                        <p className="text-xs text-gray-600 text-center">No avatars match "{avatarSearch}"</p>
+                        <p className="text-xs text-gray-500 text-center">
+                          No avatars match "{avatarSearch}"
+                        </p>
                       </div>
                     ) : (
                       filteredAvatars.map(av => (
-                        <button key={av.id} onClick={() => setSelectedAvatar(av)}
-                          className={`relative rounded-xl overflow-hidden border-2 aspect-square transition-all group ${selectedAvatar?.id === av.id
-                              ? 'border-[#00c8f5] shadow-lg shadow-[#00c8f5]'
-                              : 'border-gray-100 hover:border-gray-500'
-                            }`}>
-                        {/* Avatar image — thumbnailUrl mapped from imageUrl by Express */}
-                        {av.thumbnailUrl ? (
-                          <img src={av.thumbnailUrl} alt={av.name}
-                            className="w-full h-full object-cover"
-                            onError={e => { e.target.style.display = 'none'; }} />
-                        ) : (
-                          <div className="w-full h-full bg-gray-800 flex items-center justify-center text-3xl">👤</div>
-                        )}
+                        <button
+                          key={av.id}
+                          onClick={() => setSelectedAvatar(av)}
+                          className={`relative rounded-xl overflow-hidden border aspect-square transition-all group
+            ${selectedAvatar?.id === av.id
+                              ? 'border-[#00c8f5] shadow-[0_0_15px_#00c8f5]'
+                              : 'border-[#1e293b] hover:border-[#00c8f5]/50'
+                            }`}
+                        >
 
-                        {/* Name + variant overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent px-1.5 py-1.5">
-                          <p className="text-white text-xs font-semibold truncate text-center leading-tight">
-                            {av.name}
-                          </p>
-                          {av.variantName && (
-                            <p className="text-gray-400 truncate text-center leading-tight"
-                              style={{ fontSize: 9 }}>
-                              {av.variantName}
-                            </p>
+                          {/* Image */}
+                          {av.thumbnailUrl ? (
+                            <img
+                              src={av.thumbnailUrl}
+                              alt={av.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                              onError={e => { e.target.style.display = 'none'; }}
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-[#020617] flex items-center justify-center text-3xl">
+                              👤
+                            </div>
                           )}
-                        </div>
 
-                        {/* Selected checkmark */}
-                        {selectedAvatar?.id === av.id && (
-                          <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#00c8f5] rounded-full flex items-center justify-center shadow">
-                            <span className="text-white text-xs font-bold">✓</span>
+                          {/* Overlay */}
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent px-1.5 py-1.5">
+                            <p className="text-white text-xs font-semibold truncate text-center">
+                              {av.name}
+                            </p>
+
+                            {av.variantName && (
+                              <p className="text-gray-400 truncate text-center text-[9px]">
+                                {av.variantName}
+                              </p>
+                            )}
                           </div>
-                        )}
-                      </button>
+
+                          {/* Selected */}
+                          {selectedAvatar?.id === av.id && (
+                            <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#00c8f5] rounded-full flex items-center justify-center shadow-lg">
+                              <span className="text-white text-xs font-bold">✓</span>
+                            </div>
+                          )}
+                        </button>
                       ))
                     )}
                   </div>
                 )}
-                <p className="text-xs text-gray-600">
+
+                {/* Footer */}
+                <p className="text-xs text-gray-400">
                   {filteredAvatars.length} of {avatars.length} avatars
                   {selectedAvatar && (
                     <span className="text-[#00c8f5] ml-2 font-medium">
@@ -733,7 +771,6 @@ export default function ScriptStudioPage() {
                   )}
                 </p>
               </Section>
-
               {/* Voice */}
               <Section title={`🔊 Voice — ${voices.length} available`}>
                 {/* Search */}
@@ -771,8 +808,8 @@ export default function ScriptStudioPage() {
                   ) : filteredVoices.map(v => (
                     <div key={v.id} onClick={() => setSelectedVoice(v)}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border cursor-pointer transition-all ${selectedVoice?.id === v.id
-                          ? 'border-[#00c8f5] bg-[#00c8f5] text-white shadow-sm'
-                          : 'border-gray-100 bg-gray-50 hover:bg-gray-100'
+                        ? 'border-[#00c8f5] bg-[#00c8f5] text-white shadow-sm'
+                        : 'border-gray-100 bg-gray-50 hover:bg-gray-100'
                         }`}>
 
                       {/* Gender icon */}
@@ -808,8 +845,8 @@ export default function ScriptStudioPage() {
                         <button onClick={e => { e.stopPropagation(); playVoicePreview(v); }}
                           title="Preview voice"
                           className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${playingVoiceId === v.id
-                              ? 'bg-[#00c8f5] text-white'
-                              : 'bg-gray-200 hover:bg-gray-300 text-gray-400'
+                            ? 'bg-[#00c8f5] text-white'
+                            : 'bg-gray-200 hover:bg-gray-300 text-gray-400'
                             }`}>
                           {playingVoiceId === v.id ? '⏹' : '▶'}
                         </button>
@@ -839,8 +876,8 @@ export default function ScriptStudioPage() {
                     {LLM_OPTIONS.map(l => (
                       <button key={l.id} onClick={() => setSelectedLlm(l.id)}
                         className={`flex-1 py-2 rounded-xl border text-xs font-medium transition-all ${selectedLlm === l.id
-                            ? 'border-[#00c8f5] bg-[#00c8f5] text-white shadow-sm'
-                            : 'border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200'
+                          ? 'border-[#00c8f5] bg-[#00c8f5] text-white shadow-sm'
+                          : 'border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200'
                           }`}>{l.label}</button>
                     ))}
                   </div>
@@ -862,8 +899,8 @@ export default function ScriptStudioPage() {
                         onClick={() => !isElevenLabs && setEmotion(e.id)}
                         disabled={isElevenLabs}
                         className={`flex flex-col items-center py-2.5 rounded-xl border text-xs font-medium transition-all ${emotion === e.id && !isElevenLabs
-                            ? 'border-[#00c8f5] bg-[#00c8f5] text-white shadow-sm'
-                            : 'border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200'
+                          ? 'border-[#00c8f5] bg-[#00c8f5] text-white shadow-sm'
+                          : 'border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200'
                           } ${isElevenLabs ? 'opacity-30 cursor-not-allowed' : ''}`}>
                         <span className="text-xl mb-0.5">{e.icon}</span>{e.label}
                       </button>
@@ -917,8 +954,8 @@ export default function ScriptStudioPage() {
                   {filteredLangs.map(lang => (
                     <button key={lang.code} onClick={() => setSelectedLang(lang)}
                       className={`flex items-center gap-3 px-3 py-2 rounded-xl border text-sm transition-all ${selectedLang.code === lang.code
-                          ? 'border-[#00c8f5] bg-[#00c8f5] text-white'
-                          : 'border-gray-100 bg-gray-50 hover:bg-gray-100'
+                        ? 'border-[#00c8f5] bg-[#00c8f5] text-white'
+                        : 'border-gray-100 bg-gray-50 hover:bg-gray-100'
                         }`}>
                       <span className="text-xl">{lang.flag}</span>
                       <p className={`text-xs font-medium flex-1 text-left ${selectedLang.code === lang.code ? 'text-white' : 'text-gray-900'}`}>{lang.label}</p>
@@ -991,7 +1028,7 @@ export default function ScriptStudioPage() {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Script *</label>
+                  <label className="text-xs font-semibold text-purple-500 uppercase tracking-wider">Script *</label>
                   <div className="flex gap-3 text-xs text-gray-500">
                     <span>{wordCount(script)} words</span>
                     <span>{estimateDuration(script, speechSpeed)}</span>
@@ -1000,7 +1037,10 @@ export default function ScriptStudioPage() {
                 <textarea value={script} onChange={e => setScript(e.target.value)}
                   placeholder={`Write or paste your script here...\n\nThe avatar will speak exactly what you write in ${selectedLang.label}.`}
                   rows={14}
-                  className="w-full bg-gray-50 text-gray-900 text-sm rounded-xl px-3 py-3 resize-none border border-gray-100 focus:border-[#00c8f5] focus:outline-none leading-relaxed" />
+                  className="w-full bg-gray-50 text-gray-900 text-sm rounded-xl px-3 py-3 resize-none 
+                  border border-[#00c8f5] shadow-[0_0_8px_#00c8f5]/50 
+                  focus:border-[#00c8f5] focus:shadow-[0_0_12px_#00c8f5] focus:outline-none 
+                 leading-relaxed hover:shadow-[0_0_12px_#00c8f5] transition-all duration-300" />
               </div>
 
               {/* Summary */}
@@ -1042,7 +1082,8 @@ export default function ScriptStudioPage() {
             <video id="script-video" autoPlay playsInline className="w-full h-full object-cover" />
 
             {recStatus === 'idle' && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60">
+              <div className="absolute inset-0 flex flex-col items-center justify-center 
+              bg-[#0f172a]/80 backdrop-blur-sm border border-[#1e293b] hover:border-[#00c8f5] transition-all duration-300">
                 {selectedAvatar?.thumbnailUrl ? (
                   <img src={selectedAvatar.thumbnailUrl} alt=""
                     className="w-20 h-20 rounded-full object-cover border-4 border-gray-100 mb-3 opacity-70"
