@@ -7,7 +7,7 @@ const Features = () => {
           
 
           {/* Heading */}
-          <div className="-mt-15 mb-10 md:mb-18">
+          <div className="-mt- mb-10 md:mb-18">
             <h2 className="mb-4 text-center text-3xl font-bold text-white md:mb-6 lg:text-4xl">
               Intelligent <span className="text-purple-500">AI Avatar Video Creation</span>
             </h2>

@@ -39,13 +39,13 @@ export default function Navbar() {
         </Link>
 
         <Link
-          href="/#contact"
+          href="/contact"
           className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
         >
           Contact
         </Link>
         <Link
-          href="/admin/Dashboard"
+          href="/user/dashboard"
           className="text-slate-300 hover:text-purple-500 hover:underline hover:underline-offset-10 transition"
         >
           Dashboard

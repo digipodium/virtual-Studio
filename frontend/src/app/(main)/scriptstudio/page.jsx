@@ -608,16 +608,16 @@ export default function ScriptStudioPage() {
 
   // ── Render ────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F] text-white flex flex-col">
       <audio ref={audioPreviewRef} className="hidden" />
 
       {/* Top bar */}
-      <div className="border-b border-gray-100 px-6 py-3 flex items-center justify-between shrink-0 bg-white">
+      <div className="border-b border-gray-800 px-6 py-3 flex items-center justify-between shrink-0 bg-[#111827]">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00c8f5] to-blue-600 flex items-center justify-center text-sm">📝</div>
           <div>
             <p className="font-bold text-sm">Script Studio</p>
-            <p className="text-xs text-gray-500 leading-none">Avatar video from script</p>
+            <p className="text-xs text-gray-400 leading-none">Avatar video from script</p>
           </div>
         </div>
         <Steps current={step} />

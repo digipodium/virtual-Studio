@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Spline from "@splinetool/react-spline";
- import Link from "next/link";
+import Link from "next/link";
 
 const Home = () => {
   const [showVideo, setShowVideo] = useState(false);
@@ -28,7 +28,7 @@ const Home = () => {
               AI Avatar is a web-based content creation platform that transforms simple text scripts into professional studio-quality videos using reusable digital avatars — no camera, no re-recording, and no watermark required.
             </p>
 
-            <div className="flex gap-4">
+            <div className="flex gap-6 mt-8">
 
               {/* WATCH DEMO */}
               <button
@@ -39,15 +39,14 @@ const Home = () => {
               </button>
 
               {/* GENERATE */}
-            
-
-          <Link href="/scriptstudio">
-         <button
-            className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-8 py-4 rounded-full hover:scale-105 transition"
-           >
-         Generate Video
-         </button>
-         </Link>
+              <Link href="/scriptstudio">
+              
+                <button
+                  className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-8 py-4 rounded-full hover:scale-105 transition"
+                >
+                  Generate Video
+                </button>
+              </Link>
 
             </div>
           </div>
@@ -94,3 +93,36 @@ const Home = () => {
 };
 
 export default Home;
+const handleGenerate = async () => {
+  try {
+    // 🟢 STEP 1: token lo
+    const tokenRes = await fetch("http://127.0.0.1:5000/app/api/anam/session-token", {
+      method: "POST",
+    });
+
+    const tokenData = await tokenRes.json();
+    console.log("TOKEN:", tokenData);
+
+    if (!tokenData.token) {
+      throw new Error("Token not received");
+    }
+
+    // 🟢 STEP 2: generate
+    const res = await fetch("http://127.0.0.1:5000/app/api/anam/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        script,
+        token: tokenData.token, // 🔥 MUST
+      }),
+    });
+
+    const data = await res.json();
+    console.log("VIDEO:", data);
+
+  } catch (error) {
+    console.error("Generation failed:", error);
+  }
+};
