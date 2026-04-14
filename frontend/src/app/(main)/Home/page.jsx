@@ -41,9 +41,12 @@ const Home = () => {
               {/* GENERATE */}
               <Link href="/scriptstudio">
               
+              
                 <button
                   className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-8 py-4 rounded-full hover:scale-105 transition"
+        
                 >
+        
                   Generate Video
                 </button>
               </Link>
