@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createClient } from '@anam-ai/js-sdk';
 import { AnamEvent } from '@anam-ai/js-sdk/dist/module/types';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -209,13 +210,8 @@ function providerBadgeClass(provider = '') {
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
-export default function ScriptStudioPage() {
+function ScriptStudioPageContent() {
   const router = useRouter();
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      router.push('/login');
-    }
-  }, [router]);
 
   const anamClientRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -1209,5 +1205,13 @@ export default function ScriptStudioPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ScriptStudioPage() {
+  return (
+    <ProtectedRoute>
+      <ScriptStudioPageContent />
+    </ProtectedRoute>
   );
 }

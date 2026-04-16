@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { useAuth } from "@/context/AuthContext";
 
 import {
   Users,
@@ -14,8 +16,9 @@ import {
 } from "lucide-react";
 
 
-export default function AdminDashboard() {
+function AdminDashboardContent() {
   const router = useRouter();
+  const { user: authUser, logout } = useAuth();
 
   const [data, setData] = useState(null);
   const [allActivities, setAllActivities] = useState([]);
@@ -27,21 +30,42 @@ export default function AdminDashboard() {
 
   const [userVideos, setUserVideos] = useState([]);
   const [isLoadingVideos, setIsLoadingVideos] = useState(false);
+  const [adminVerified, setAdminVerified] = useState(false);
 // add
   useEffect(() => {
-  const storedUser = localStorage.getItem("user");
-
-  if (!storedUser) {
-    router.push("/login");
-    return;
-  }
-
-  const user = JSON.parse(storedUser);
-
-  if (user.role !== "admin") {
-    router.push("/user/dashboard");
-  }
-}, [router]);
+    console.log('authUser:', authUser);
+    console.log('authUser?.role:', authUser?.role);
+    
+    if (!authUser) {
+      console.log('No authUser, checking localStorage');
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          console.log('Stored user role:', userData.role);
+          if (userData.role !== 'admin') {
+            console.log('Stored user is not admin, redirecting');
+            router.push("/user/dashboard");
+            return;
+          }
+          setAdminVerified(true);
+        } catch (err) {
+          console.error('Error parsing stored user:', err);
+          router.push("/login");
+        }
+      }
+      return;
+    }
+    
+    if (authUser.role !== "admin") {
+      console.log('authUser role is not admin, redirecting to user dashboard');
+      router.push("/user/dashboard");
+      return;
+    }
+    
+    console.log('authUser is admin, allowing access');
+    setAdminVerified(true);
+  }, [authUser, router]);
 
   // Fetch dashboard data
   useEffect(() => {
@@ -82,6 +106,17 @@ export default function AdminDashboard() {
       : allActivities.filter((a) => a.action === filter);
 
   const uniqueActions = [...new Set(allActivities.map((a) => a.action))];
+
+  if (!adminVerified) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mx-auto"></div>
+          <p className="text-gray-400 mt-4">Verifying admin access...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gradient-to-r from-[#0B0B0F] via-[#1a0b2e] to-[#0B0B0F] text-white">
@@ -266,5 +301,13 @@ export default function AdminDashboard() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <ProtectedRoute>
+      <AdminDashboardContent />
+    </ProtectedRoute>
   );
 }

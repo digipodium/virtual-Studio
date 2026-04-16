@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import { useAuth } from '@/context/AuthContext';
 
-export default function UserDashboard() {
+function UserDashboardContent() {
   const router = useRouter();
+  const { user: authUser } = useAuth();
     const [userVideos, setUserVideos] = useState([]);
 
   const [user, setUser] = useState(null);
@@ -13,18 +16,12 @@ export default function UserDashboard() {
   const [feedback, setFeedback] = useState({ rating: 5, message: '' });
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
-      router.push('/login');
-      return;
+    // Use auth context user
+    if (authUser) {
+      setUser(authUser);
+      fetchActivities(authUser._id, authUser.role);
     }
-    
-    const parsedUser = JSON.parse(userData);
-    setUser(parsedUser);
-    
-    // Fetch activities based on user role
-    fetchActivities(parsedUser._id, parsedUser.role);
-  }, []);
+  }, [authUser]);
   // add
  const fetchUserVideos = async (userId) => {
   try {
@@ -188,5 +185,13 @@ export default function UserDashboard() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function UserDashboard() {
+  return (
+    <ProtectedRoute>
+      <UserDashboardContent />
+    </ProtectedRoute>
   );
 }

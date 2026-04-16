@@ -5,35 +5,17 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { trackLogin } from "@/utils/activityTracker";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
 
   const router = useRouter();
+  const { login } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
     password: ""
   });
-  // adddasboard
-  const handleLoginOld = async () => {
-  const res = await fetch("http://localhost:5000/api/users/login", {
-    method: "POST",
-    body: JSON.stringify({ email: form.email, password: form.password }),
-  });
-
-  const data = await res.json();
-
-  if (data.success) {
-    localStorage.setItem("user", JSON.stringify(data.user));
-
-    // 🔥 ROLE BASED REDIRECT
-    if (data.user.role === "admin") {
-      router.push("/admin/dashboard");
-    } else {
-      router.push("/user/dashboard");
-    }
-  }
-};
 
   const handleChange = (e) => {
     setForm({
@@ -57,18 +39,22 @@ export default function Login() {
       // ✅ Success
       toast.success("Login Successful ✅");
 
-      // 🔐 Token save (important)
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // 🔐 Use AuthContext to login
+      login(res.data.user, res.data.token);
 
       // 📊 Track login activity
       await trackLogin(res.data.user.name);
 
       // 🚀 Redirect to appropriate dashboard based on role
       const userRole = res.data.user.role;
+      console.log('User logged in with role:', userRole);
+      console.log('Full user data:', res.data.user);
+      
       if (userRole === 'admin') {
+        console.log('Redirecting to admin dashboard');
         router.push("/admin/dashboard");
       } else {
+        console.log('Redirecting to user dashboard');
         router.push("/user/dashboard");
       }
 

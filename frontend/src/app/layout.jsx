@@ -1,6 +1,7 @@
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
@@ -15,10 +16,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen text-gray-900 bg-white">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Toaster/>
-             <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Toaster/>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

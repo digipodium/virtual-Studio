@@ -44,15 +44,24 @@ async function getTransporter() {
 // @route   POST /api/users/signup
 router.post('/signup', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
+
+    // 🔒 Trim inputs to avoid whitespace issues
+    name = name?.trim() || '';
+    email = email?.trim().toLowerCase() || '';
+    password = password?.trim() || '';
 
     if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Please enter all fields' });
+      return res.status(400).json({ success: false, error: 'Please enter all fields' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ success: false, error: 'Password must be at least 6 characters' });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(400).json({ success: false, error: 'User already exists with this email' });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -68,6 +77,8 @@ router.post('/signup', async (req, res) => {
     );
 
     res.status(201).json({
+      success: true,
+      message: 'Signup successful',
       token,
       user: {
         id: savedUser._id,
@@ -77,27 +88,33 @@ router.post('/signup', async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
 // @route   POST /api/users/login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+
+    // 🔒 Trim inputs to avoid whitespace issues
+    email = email?.trim().toLowerCase() || '';
+    password = password?.trim() || '';
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Please log in with email and password' });
+      return res.status(400).json({ success: false, error: 'Please provide email and password' });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: 'Invalid credentials' });
+      return res.status(400).json({ success: false, error: 'Invalid credentials - user not found' });
     }
 
+    // 🔐 Compare password (bcrypt will handle the hashed password)
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
+      console.error(`Login failed for ${email}: password mismatch`);
+      return res.status(400).json({ success: false, error: 'Invalid credentials - wrong password' });
     }
 
     const token = jwt.sign(
@@ -107,6 +124,8 @@ router.post('/login', async (req, res) => {
     );
 
     res.json({
+      success: true,
+      message: 'Login successful',
       token,
       user: {
         id: user._id,
@@ -116,7 +135,8 @@ router.post('/login', async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Login error:', err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -320,8 +340,8 @@ router.get('/feedback', async (req, res) => {
 // @route   POST /api/users/create-admin — Create admin user (for setup only)
 router.post('/create-admin', async (req, res) => {
   try {
-    const adminEmail = 'admin@gmail.com';
-    const adminPassword = 'admin123';
+    const adminEmail = 'admin2@gmail.com';
+    const adminPassword = 'Admin@1234';
     const adminName = 'Admin User';
 
     // Check if admin already exists
@@ -365,5 +385,7 @@ router.post('/create-admin', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
 
 export default router;

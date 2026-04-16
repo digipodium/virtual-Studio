@@ -63,13 +63,11 @@ const UserSchema = new mongoose.Schema(
 );
 
 
-// 🔐 Password hash before save (BEST PRACTICE)
-UserSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-
-  this.password = await bcrypt.hash(this.password, 10);
-  
-});
+// 🔐 DO NOT hash here - handled in routes to have better control
+// UserSchema.pre("save", async function () {
+//   if (!this.isModified("password")) return;
+//   this.password = await bcrypt.hash(this.password, 10);
+// });
 
 
 // Prevent model overwrite error (Next.js fix)

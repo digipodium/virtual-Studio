@@ -1,10 +1,11 @@
 "use client";
 import { useState, useRef } from "react";
 import axios from "axios";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-export default function GeneratePage() {
+function GeneratePageContent() {
   const [script, setScript] = useState("");
   const [loading, setLoading] = useState(false);
   const videoRef = useRef(null);
@@ -57,5 +58,13 @@ export default function GeneratePage() {
         className="mt-6 w-full max-w-xl rounded-lg"
       />
     </div>
+  );
+}
+
+export default function GeneratePage() {
+  return (
+    <ProtectedRoute>
+      <GeneratePageContent />
+    </ProtectedRoute>
   );
 }

@@ -4,9 +4,11 @@ import Link from "next/link";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Signup() {
-const router = useRouter();
+  const router = useRouter();
+  const { login } = useAuth();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -26,7 +28,12 @@ const router = useRouter();
 
     // 🔒 Password match check
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match ❌");
+      toast.error("Passwords do not match ❌");
+      return;
+    }
+
+    if (!form.name || !form.email || !form.password) {
+      toast.error("All fields are required ❌");
       return;
     }
 
@@ -40,17 +47,30 @@ const router = useRouter();
         }
       );
 
-      toast.success("Signup Successful ✅");
-      router.push('/login');
-      console.log(res.data);
+      if (res.data.success) {
+        toast.success("Signup Successful ✅");
+        
+        // Use AuthContext to store user and token
+        login(res.data.user, res.data.token);
+        
+        // Redirect to dashboard based on role
+        const userRole = res.data.user.role;
+        if (userRole === 'admin') {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/user/dashboard");
+        }
+      }
 
     } catch (error) {
       console.log(error);
 
-      if (error.response) {
-        toast.error(error.response.data.message || "Signup failed ❌");
+      if (error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
       } else {
-        toast.error("Server error ❌");
+        toast.error("Signup failed ❌");
       }
     }
   };

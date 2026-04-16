@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { MessageSquare } from 'lucide-react';
 import { createClient } from '@anam-ai/js-sdk';
 import { AnamEvent } from '@anam-ai/js-sdk/dist/module/types';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -159,13 +160,8 @@ function ChatBubble({ message }) {
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
-export default function VirtualAssistantPage() {
+function VirtualAssistantPageContent() {
   const router = useRouter();
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      router.push('/login');
-    }
-  }, [router]);
 
   const anamClientRef = useRef(null);
   const audioPreviewRef = useRef(null);
@@ -1038,5 +1034,13 @@ export default function VirtualAssistantPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function VirtualAssistantPage() {
+  return (
+    <ProtectedRoute>
+      <VirtualAssistantPageContent />
+    </ProtectedRoute>
   );
 }
