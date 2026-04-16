@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { trackLogin } from "@/utils/activityTracker";
 import { useAuth } from "@/context/AuthContext";
@@ -10,6 +10,8 @@ import { useAuth } from "@/context/AuthContext";
 export default function Login() {
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo") || "/user/dashboard";
   const { login } = useAuth();
 
   const [form, setForm] = useState({
@@ -45,7 +47,7 @@ export default function Login() {
       // 📊 Track login activity
       await trackLogin(res.data.user.name);
 
-      // 🚀 Redirect to appropriate dashboard based on role
+      // 🚀 Redirect based on role or return to protected page
       const userRole = res.data.user.role;
       console.log('User logged in with role:', userRole);
       console.log('Full user data:', res.data.user);
@@ -54,8 +56,8 @@ export default function Login() {
         console.log('Redirecting to admin dashboard');
         router.push("/admin/dashboard");
       } else {
-        console.log('Redirecting to user dashboard');
-        router.push("/user/dashboard");
+        console.log('Redirecting to:', returnTo);
+        router.push(returnTo);
       }
 
     } catch (error) {
@@ -143,7 +145,7 @@ export default function Login() {
         {/* FOOTER */}
         <div className="mt-6 text-center text-gray-400 text-sm">
           Don't have an account?{" "}
-          <Link href="/signup" className="text-purple-400 hover:underline">
+          <Link href={`/signup?returnTo=${encodeURIComponent(returnTo)}`} className="text-purple-400 hover:underline">
             Sign up
           </Link>
         </div>

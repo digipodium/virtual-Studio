@@ -3,11 +3,13 @@ import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Signup() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo") || "/user/dashboard";
   const { login } = useAuth();
   const [form, setForm] = useState({
     name: "",
@@ -53,12 +55,12 @@ export default function Signup() {
         // Use AuthContext to store user and token
         login(res.data.user, res.data.token);
         
-        // Redirect to dashboard based on role
+        // Redirect to protected page or user dashboard
         const userRole = res.data.user.role;
         if (userRole === 'admin') {
           router.push("/admin/dashboard");
         } else {
-          router.push("/user/dashboard");
+          router.push(returnTo);
         }
       }
 
@@ -155,7 +157,7 @@ export default function Signup() {
 
         <div className="mt-6 text-center text-gray-400 text-sm">
           Already have an account?{" "}
-          <Link href="/login" className="text-purple-400 hover:underline">
+          <Link href={`/login?returnTo=${encodeURIComponent(returnTo)}`} className="text-purple-400 hover:underline">
             Log in
           </Link>
         </div>
