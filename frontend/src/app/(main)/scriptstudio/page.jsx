@@ -880,29 +880,7 @@ function ScriptStudioPageContent() {
                 </div>
               </Section>
 
-              {/* Expression & Voice Tuning */}
-              <Section title="🎭 Expression & Voice Tuning">
-                <div>
-                  <p className="text-xs text-gray-400 font-semibold mb-2">
-                    Emotion
-                    <span className="text-gray-600 font-normal ml-1">
-                      {isElevenLabs ? '(not available for ElevenLabs)' : '(Cartesia voices)'}
-                    </span>
-                  </p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {EMOTIONS.map(e => (
-                      <button key={e.id}
-                        onClick={() => !isElevenLabs && setEmotion(e.id)}
-                        disabled={isElevenLabs}
-                        className={`flex flex-col items-center py-2.5 rounded-xl border text-xs font-medium transition-all ${emotion === e.id && !isElevenLabs
-                          ? 'border-[#00c8f5] bg-[#00c8f5] text-white shadow-sm'
-                          : 'border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200'
-                          } ${isElevenLabs ? 'opacity-30 cursor-not-allowed' : ''}`}>
-                        <span className="text-xl mb-0.5">{e.icon}</span>{e.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              
 
                 <Slider label="Speech Speed" value={speechSpeed}
                   min={isElevenLabs ? 0.7 : 0.6} max={isElevenLabs ? 1.2 : 1.5} step={0.05}
@@ -938,7 +916,7 @@ function ScriptStudioPageContent() {
                     min={0} max={1} step={0.05} onChange={setSpeechEnhancement}
                     format={v => v.toFixed(2)} hint="Reduces background noise" />
                 </div>
-              </Section>
+             
 
               {/* Language */}
               <Section title="🌍 Language & Accent">
