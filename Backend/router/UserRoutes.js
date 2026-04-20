@@ -143,7 +143,8 @@ router.post('/login', async (req, res) => {
 // @route   POST /api/users/forgot-password  — sends OTP to email
 router.post('/forgot-password', async (req, res) => {
   try {
-    const { email } = req.body;
+    let { email } = req.body;
+    email = email?.trim().toLowerCase() || '';
     if (!email) return res.status(400).json({ error: 'Email is required' });
 
     const user = await User.findOne({ email });
@@ -198,18 +199,41 @@ router.post('/forgot-password', async (req, res) => {
 // @route   POST /api/users/verify-otp  — verifies OTP
 router.post('/verify-otp', async (req, res) => {
   try {
-    const { email, otp } = req.body;
+    let { email, otp } = req.body;
+    email = email?.trim().toLowerCase() || '';
+    otp = otp?.trim() || '';
+    
+    if (!email || !otp) return res.status(400).json({ error: 'Email and OTP are required' });
+    
     const user = await User.findOne({ email });
+    
+    console.log('\n🔍 OTP Verification Attempt:');
+    console.log('  Email:', email);
+    console.log('  OTP Sent:', otp);
+    console.log('  User Found:', !!user);
+    if (user) {
+      console.log('  OTP Stored:', user.resetPasswordOtp);
+      console.log('  Expires:', user.resetPasswordExpires);
+    }
 
-    if (!user || user.resetPasswordOtp !== otp) {
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    if (user.resetPasswordOtp !== otp) {
+      console.log('  ❌ OTP Mismatch!');
       return res.status(400).json({ error: 'Invalid OTP' });
     }
+
     if (new Date() > user.resetPasswordExpires) {
+      console.log('  ❌ OTP Expired!');
       return res.status(400).json({ error: 'OTP has expired' });
     }
 
+    console.log('  ✅ OTP Verified!');
     res.json({ success: true, message: 'OTP verified' });
   } catch (err) {
+    console.error('OTP verification error:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -217,7 +241,13 @@ router.post('/verify-otp', async (req, res) => {
 // @route   POST /api/users/reset-password  — resets password
 router.post('/reset-password', async (req, res) => {
   try {
-    const { email, otp, newPassword } = req.body;
+    let { email, otp, newPassword } = req.body;
+    email = email?.trim().toLowerCase() || '';
+    otp = otp?.trim() || '';
+    newPassword = newPassword?.trim() || '';
+    
+    if (!email || !otp || !newPassword) return res.status(400).json({ error: 'Email, OTP, and new password are required' });
+    
     const user = await User.findOne({ email });
 
     if (!user || user.resetPasswordOtp !== otp) {
@@ -229,10 +259,11 @@ router.post('/reset-password', async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
-    user.resetPasswordOtp = undefined;
-    user.resetPasswordExpires = undefined;
+    user.resetPasswordOtp = null;
+    user.resetPasswordExpires = null;
     await user.save();
 
+    console.log('✅ Password reset successfully for:', email);
     res.json({ success: true, message: 'Password reset successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });

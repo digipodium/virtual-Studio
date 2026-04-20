@@ -1,123 +1,3 @@
-// "use client";
-// import { useState, Suspense, useEffect } from 'react';
-// import { useSearchParams, useRouter } from 'next/navigation';
-// import toast from 'react-hot-toast';
-// import API from '@/utils/api';
-
-// export function VerifyOTP() {
-//     const searchParams = useSearchParams();
-//     const email = searchParams.get('email'); // URL se email nikal rahe hain
-//     const [otp, setOtp] = useState('');
-//     const [password, setPassword] = useState('');
-//     const [timer, setTimer] = useState(60);
-//     const [canResend, setCanResend] = useState(false);
-//     const [loading, setLoading] = useState(false);
-//     const router = useRouter();
-
-
-//     // Timer Logic: Har second ghat-ta rahega
-//     useEffect(() => {
-//         let interval;
-//         if (timer > 0) {
-//             interval = setInterval(() => {
-//                 setTimer((prev) => prev - 1);
-//             }, 1000);
-//         } else {
-//             setCanResend(true); // Jab timer 0 ho jaye, button enable kar do
-//             clearInterval(interval);
-//         }
-//         return () => clearInterval(interval); // Cleanup
-//     }, [timer]);
-//     const handleResendOTP = async () => {
-//         try {
-//             setLoading(true);
-//             // Aapka backend endpoint yahan aayega
-//             await API.post("/auth/forgotPassword", { email });
-//             toast.success("New OTP sent to your email!");
-//             setTimer(60); // Timer reset karein
-//             setCanResend(false);
-//         } catch (error) {
-//             toast.error("Failed to resend OTP");
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     const handleReset = async (e) => {
-//         e.preventDefault();
-//         setLoading(true);
-//         try {
-//             await API.post("/auth/resetPassword", { email, otp, password });
-//             toast.success("Password Reset Successful!");
-//             router.push("/auth/login");
-//         } catch (error) {
-
-//             toast.error(error.response?.data?.message || "Invalid or Expired OTP!");
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     return (
-//         <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center p-4">
-//             <form onSubmit={handleReset} className="bg-slate-900 p-8 rounded-xl border border-slate-800 w-96 shadow-2xl">
-//                 <h2 className="text-2xl text-cyan-500 font-bold mb-2 text-center">Verify OTP</h2>
-//                 <p className='text-slate-400 text-xs mb-6 text-center italic'>OTP sent to: {email}</p>
-
-//                 <div className="space-y-4">
-//                     <input
-//                         type="text"
-//                         placeholder='Enter OTP'
-//                         maxLength="6"
-//                         className='w-full p-3 bg-slate-800 text-white rounded-lg outline-none border border-slate-700 focus:border-cyan-600'
-//                         onChange={(e) => setOtp(e.target.value)}
-//                         required
-//                     />
-//                     <input
-//                         type="password"
-//                         placeholder='Set New Password'
-//                         className='w-full p-3 bg-slate-800 text-white rounded-lg outline-none border border-slate-700 focus:border-cyan-600'
-//                         onChange={(e) => setPassword(e.target.value)}
-//                         required
-//                     />
-                   
-//                     {/* Timer Display */}
-//                     <div className="text-center text-sm">
-//                         {canResend ? (
-//                             <button
-//                                 type="button"
-//                                 onClick={handleResendOTP}
-//                                 className="text-cyan-500 hover:underline font-medium"
-//                             >
-//                                 Resend OTP
-//                             </button>
-//                         ) : (
-//                             <p className="text-slate-500">Resend OTP in <span className="text-cyan-500 font-bold">{timer}s</span></p>
-//                         )}
-//                     </div>
-//                     <button
-//                         disabled={loading}
-//                         className="w-full flex items-center justify-center px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg hover:from-cyan-400 hover:to-blue-400 transition duration-300 shadow-2xl disabled:opacity-50">
-//                         {loading ? "Resetting..." : "Confirm Reset"}
-//                     </button>
-//                 </div>
-//                 <div className='mt-4 text-center'>
-//                     <a href='/auth/forgotPassword' className='text-sm font-semibold text-cyan-500 hover:underline'>Back to ForgotPassword</a>
-//                 </div>
-
-//             </form>
-//         </div>
-//     );
-// }
-// export default function VerifyOtpPageWrapper() {
-//     return (
-//         <Suspense fallback={<div className='min-h-screen bg-[#0b0f1a] flex items-center justify-center text-white text-xl'>
-//             Loading...
-//         </div>}>
-//             <VerifyOTP />
-//         </Suspense>
-//     );
-//}
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
@@ -128,46 +8,90 @@ import toast from "react-hot-toast";
 export default function VerifyOtpPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const email = searchParams.get("email");
+  const email = searchParams.get("email")?.toLowerCase().trim() || "";
 
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleVerify = async () => {
     try {
-      const res = await API.post("/auth/verify-otp", {
+      if (!email) {
+        toast.error("Email is missing ❌");
+        return;
+      }
+
+      const trimmedOtp = otp.trim();
+      if (!trimmedOtp || trimmedOtp.length !== 6) {
+        toast.error("Please enter a 6-digit OTP ❌");
+        return;
+      }
+
+      setLoading(true);
+
+      await API.post("/users/verify-otp", {
         email,
-        otp,
+        otp: trimmedOtp,
       });
 
       toast.success("OTP Verified ✅");
 
-      // redirect to reset password page
-     router.push(`/auth/reset-password?email=${email}`);
+      router.push(
+        `/auth/reset-password?email=${encodeURIComponent(email)}&otp=${trimmedOtp}`
+      );
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid OTP ❌");
+      console.error("OTP verification error:", err.response?.data);
+      toast.error(err.response?.data?.error || "Invalid OTP ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center">
-      <h1 className="text-2xl mb-4">Verify OTP</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black px-4 ">
+      
+      {/* Card */}
+      <div className="w-full max-w-md bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl p-8">
+        
+        {/* Heading */}
+        <h1 className="text-3xl font-bold text-white text-center mb-2">
+          Verify OTP
+        </h1>
 
-      <p className="mb-2 text-gray-400">{email}</p>
+        <p className="text-center text-gray-400 text-sm mb-6">
+          Enter the 6-digit code sent to
+        </p>
 
-      <input
-        type="text"
-        placeholder="Enter OTP"
-        className="border p-2 mb-4"
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-      />
+        <p className="text-center text-purple-400 text-sm mb-6 break-all">
+          {email}
+        </p>
 
-      <button
-        onClick={handleVerify}
-        className="bg-purple-500 text-white px-4 py-2 rounded"
-      >
-        Verify OTP
-      </button>
+        {/* OTP Input */}
+        <input
+          type="text"
+          maxLength={6}
+          placeholder="Enter 6-digit OTP"
+          className="w-full bg-black/40 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-4 py-3 text-center tracking-widest text-lg focus:outline-none focus:border-purple-500"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+        />
+
+        {/* Button */}
+        <button
+          onClick={handleVerify}
+          disabled={loading}
+          className="w-full mt-6 bg-purple-600 hover:bg-purple-700 transition-all text-white font-semibold py-3 rounded-lg disabled:opacity-50"
+        >
+          {loading ? "Verifying..." : "Verify OTP"}
+        </button>
+
+        {/* Extra */}
+        <p className="text-center text-gray-500 text-xs mt-6">
+          Didn’t receive OTP?{" "}
+          <span className="text-purple-400 cursor-pointer hover:underline">
+            Resend
+          </span>
+        </p>
+      </div>
     </div>
   );
 }

@@ -14,10 +14,11 @@ const router = useRouter();
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await API.post("/auth/forgotPassword", { email });
+      const trimmedEmail = email.trim().toLowerCase();
+      const res = await API.post("/users/forgot-password", { email: trimmedEmail });
       toast.success("OTP sent to your email!");
       // Email ko URL parameter mein bhej rahe hain taki next page pe use kar sakein
-    router.push(`/auth/verifyOTP?email=${email}`);
+    router.push(`/auth/verifyOTP?email=${encodeURIComponent(trimmedEmail)}`);
     } catch (error) {
       toast.error(error.response?.data?.message || "User not found!");
     } finally {

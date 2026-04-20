@@ -209,27 +209,6 @@ app.get('/api/anam/voices', async (req, res) => {
   }
 });
 
-// ── POST /api/anam/session-token ──────────────────────────────────────────────
-// Frontend sends the full object from buildPersonaConfig():
-//
-// {
-//   name:         string,
-//   avatarId:     string,
-//   voiceId:      string,
-//   llmId:        string,
-//   languageCode: string,          e.g. "en", "hi", "fr"
-//   skipGreeting: boolean,
-//   systemPrompt: string,
-//
-//   // Cartesia voice:
-//   voiceGenerationOptions: { speed: number, volume: number, emotion: string }
-//
-//   // ElevenLabs voice:
-//   voiceGenerationOptions: { speed: number, stability: number, similarityBoost: number,
-//                             style: number, useSpeakerBoost: boolean }
-//
-//   voiceDetectionOptions: { endOfSpeechSensitivity: number, speechEnhancementLevel: number }
-// }
 app.post('/api/anam/session-token', async (req, res) => {
   console.log('Session token request body:', JSON.stringify(req.body, null, 2));
 
