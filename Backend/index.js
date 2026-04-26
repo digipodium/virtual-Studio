@@ -12,6 +12,9 @@ import FormData from 'form-data';
 import Persona from './models/Persona.js';
 import Activity from './models/Activity.js';
 
+import dns from "node:dns/promises";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
