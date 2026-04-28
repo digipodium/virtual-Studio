@@ -28,7 +28,7 @@ const Home = () => {
               AI Avatar is a web-based content creation platform that transforms simple text scripts into professional studio-quality videos.
             </p>
 
-            <div className="flex gap-6 mt-8">
+            <div className="flex flex-wrap gap-4 mt-8 justify-center lg:justify-start">
 
               {/* WATCH DEMO */}
               <button

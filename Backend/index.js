@@ -11,6 +11,8 @@ import axios from 'axios';
 import FormData from 'form-data';
 import Persona from './models/Persona.js';
 import Activity from './models/Activity.js';
+import User from './models/UserModel.js';
+import Feedback from './models/FeedbackModel.js';
 
 import dns from "node:dns/promises";
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
@@ -475,9 +477,12 @@ app.get('/api/activity/all', async (req, res) => {
 // GET /api/dashboard/stats — Admin dashboard statistics
 app.get('/api/dashboard/stats', async (req, res) => {
   try {
-    const totalUsers = await mongoose.connection.collection('users').countDocuments?.() || 0;
+    const totalUsers = await User.countDocuments();
     const totalActivities = await Activity.countDocuments();
-    const totalFeedback = await mongoose.connection.collection('feedbacks').countDocuments?.() || 0;
+    const totalFeedback = await Feedback.countDocuments();
+    
+    // Total videos generated (from activities)
+    const totalVideos = await Activity.countDocuments({ action: 'video_generated' });
     
     // Get activities by action type
     const activitiesByType = await Activity.aggregate([
@@ -497,6 +502,7 @@ app.get('/api/dashboard/stats', async (req, res) => {
         totalUsers,
         totalActivities,
         totalFeedback,
+        totalVideos,
         activitiesByType,
         topUsers,
       }

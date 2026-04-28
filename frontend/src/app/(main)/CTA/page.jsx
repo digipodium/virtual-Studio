@@ -8,7 +8,7 @@ const CTA = () => {
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 
     bg-gradient-to-r from-purple-600 to-indigo-600 
-    rounded-2xl px-20 py-25">
+    rounded-2xl px-6 py-10 md:px-16 md:py-16 text-center md:text-left">
 
             {/* LEFT CONTENT */}
             <div className="text-left">

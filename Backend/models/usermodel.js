@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-
 const UserSchema = new mongoose.Schema(
   {
     // Basic Info
@@ -25,33 +24,58 @@ const UserSchema = new mongoose.Schema(
       minlength: 6,
     },
 
-    // Profile (future use)
+    // Profile
     avatar: {
       type: String,
-      default: "",
+      default: '',
     },
 
-    // Role (security)
+    // Role
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ['user', 'admin'],
+      default: 'user',
     },
 
-    // AI usage (project specific 🔥)
+    // AI Usage
     videosCreated: {
       type: Number,
       default: 0,
     },
 
+    // Saved Videos
+    videos: [
+      {
+        name: {
+          type: String,
+          default: 'AI Video',
+        },
+
+        url: {
+          type: String,
+          required: true,
+        },
+
+        prompt: {
+          type: String,
+          default: '',
+        },
+
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
     // Subscription
     plan: {
       type: String,
-      enum: ["free", "pro"],
-      default: "free",
+      enum: ['free', 'pro'],
+      default: 'free',
     },
 
-    // Account Status
+    // Account Verification
     isVerified: {
       type: Boolean,
       default: false,
@@ -73,13 +97,12 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-
-// 🔐 DO NOT hash here - handled in routes to have better control
+// 🔐 Password hashing handled in routes
 // UserSchema.pre("save", async function () {
 //   if (!this.isModified("password")) return;
 //   this.password = await bcrypt.hash(this.password, 10);
 // });
 
-
-// Prevent model overwrite error (Next.js fix)
-export default mongoose.model("User", UserSchema);
+// Prevent model overwrite error
+export default mongoose.models.User ||
+  mongoose.model('User', UserSchema);
